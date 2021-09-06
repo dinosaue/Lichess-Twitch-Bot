@@ -2,6 +2,7 @@ import requests
 import json
 import twitch
 import random
+import time 
 
 with open('config.json') as fin:
   config = json.load(fin)
@@ -72,6 +73,19 @@ def handle_message(message: twitch.chat.Message) -> None:
       num_drawings = int(num_drawings)
       winners = draw(tournament_id, num_drawings)
       message.chat.send(f'Drawing winners are: {", ".join(winners)}')
+  #elif message.text.
+
+def is_playing():
+  url = f'https://lichess.org/api/users/status?ids=krnamericanchessnoob'
+  response = requests.get(url)
+  response_json = response.json()
+  print(response_json)
+  if 'playing' in response_json[0]: 
+    return True 
+  else: 
+    return False 
+
+# def delete_move_suggestions():
 
 def main():
   chat = twitch.Chat(channel=f'#{config.get("twitch_channel")}',
@@ -80,7 +94,6 @@ def main():
                      helix=helix)
 
   chat.subscribe(handle_message)
-
 
 if __name__ == '__main__':
   main()
